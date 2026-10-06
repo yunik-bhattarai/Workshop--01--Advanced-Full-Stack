@@ -1,22 +1,13 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Courses</title>
-</head>
-<body>
+@extends('layouts.app')
+
+@section('title', 'Courses')
+
+@section('content')
 
     <h1>Course List</h1>
 
-    @if (session('success'))
-        <p>{{ session('success') }}</p>
-    @endif
-
     <p>
         <a href="{{ route('courses.create') }}">Add Course</a>
-        |
-        <a href="{{ route('students.index') }}">Student List</a>
     </p>
 
     @if ($courses->isEmpty())
@@ -78,5 +69,4 @@
         </table>
     @endif
 
-</body>
-</html>
+@endsection

@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreCourseRequest;
+use App\Http\Requests\UpdateCourseRequest;
 use App\Models\Course;
-use Illuminate\Http\Request;
 
 class CourseController extends Controller
 {
@@ -12,9 +13,9 @@ class CourseController extends Controller
      */
     public function index()
     {
-        $courses = Course::all();
-
-        return view('course.list', compact('courses'));
+        return view('course.list', [
+            'courses' => Course::all(),
+        ]);
     }
 
     /**
@@ -28,18 +29,9 @@ class CourseController extends Controller
     /**
      * Store a newly created course.
      */
-    public function store(Request $request)
+    public function store(StoreCourseRequest $request)
     {
-        $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'description' => 'required|string',
-            'duration' => 'required|string|max:255',
-            'fee' => 'required|numeric|min:0',
-            'difficulty' => 'required|in:Easy,Medium,Hard',
-            'is_active' => 'required|boolean',
-        ]);
-
-        Course::create($validated);
+        Course::create($request->validated());
 
         return redirect()
             ->route('courses.index')
@@ -51,7 +43,9 @@ class CourseController extends Controller
      */
     public function show(Course $course)
     {
-        return view('course.detail', compact('course'));
+        return view('course.detail', [
+            'course' => $course,
+        ]);
     }
 
     /**
@@ -59,24 +53,17 @@ class CourseController extends Controller
      */
     public function edit(Course $course)
     {
-        return view('course.edit', compact('course'));
+        return view('course.edit', [
+            'course' => $course,
+        ]);
     }
 
     /**
      * Update a course.
      */
-    public function update(Request $request, Course $course)
+    public function update(UpdateCourseRequest $request, Course $course)
     {
-        $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'description' => 'required|string',
-            'duration' => 'required|string|max:255',
-            'fee' => 'required|numeric|min:0',
-            'difficulty' => 'required|in:Easy,Medium,Hard',
-            'is_active' => 'required|boolean',
-        ]);
-
-        $course->update($validated);
+        $course->update($request->validated());
 
         return redirect()
             ->route('courses.index')

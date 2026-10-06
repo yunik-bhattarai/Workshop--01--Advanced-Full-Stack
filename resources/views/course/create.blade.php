@@ -1,73 +1,97 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Add Course</title>
-</head>
-<body>
+@extends('layouts.app')
+
+@section('title', 'Add Course')
+
+@section('content')
 
     <h1>Add Course</h1>
 
-    @if ($errors->any())
-        <ul>
-            @foreach ($errors->all() as $error)
-                <li>{{ $error }}</li>
-            @endforeach
-        </ul>
-    @endif
+    @include('partials.errors')
 
     <form action="{{ route('courses.store') }}" method="POST">
         @csrf
 
         <p>
-            <label>Name:</label><br>
-            <input type="text" name="name" value="{{ old('name') }}" required>
+            <label for="name">Name:</label><br>
+            <input
+                type="text"
+                id="name"
+                name="name"
+                value="{{ old('name') }}"
+            >
         </p>
 
         <p>
-            <label>Description:</label><br>
-            <textarea name="description" required>{{ old('description') }}</textarea>
+            <label for="description">Description:</label><br>
+            <textarea
+                id="description"
+                name="description"
+            >{{ old('description') }}</textarea>
         </p>
 
         <p>
-            <label>Duration:</label><br>
-            <input type="text" name="duration" value="{{ old('duration') }}" required>
+            <label for="duration">Duration:</label><br>
+            <input
+                type="number"
+                id="duration"
+                name="duration"
+                min="1"
+                value="{{ old('duration') }}"
+            >
         </p>
 
         <p>
-            <label>Fee:</label><br>
-            <input type="number" name="fee" step="0.01" min="0"
-                   value="{{ old('fee') }}" required>
+            <label for="fee">Fee:</label><br>
+            <input
+                type="number"
+                id="fee"
+                name="fee"
+                step="0.01"
+                min="0"
+                value="{{ old('fee') }}"
+            >
         </p>
 
         <p>
-            <label>Difficulty:</label><br>
-            <select name="difficulty" required>
+            <label for="difficulty">Difficulty:</label><br>
+            <select id="difficulty" name="difficulty">
                 <option value="">Select Difficulty</option>
-                <option value="Easy" {{ old('difficulty') == 'Easy' ? 'selected' : '' }}>
+
+                <option
+                    value="Easy"
+                    {{ old('difficulty') === 'Easy' ? 'selected' : '' }}
+                >
                     Easy
                 </option>
-                <option value="Medium" {{ old('difficulty') == 'Medium' ? 'selected' : '' }}>
+
+                <option
+                    value="Medium"
+                    {{ old('difficulty') === 'Medium' ? 'selected' : '' }}
+                >
                     Medium
                 </option>
-                <option value="Hard" {{ old('difficulty') == 'Hard' ? 'selected' : '' }}>
+
+                <option
+                    value="Hard"
+                    {{ old('difficulty') === 'Hard' ? 'selected' : '' }}
+                >
                     Hard
                 </option>
             </select>
         </p>
 
         <p>
-            <label>Active:</label><br>
+            <input type="hidden" name="is_active" value="0">
 
-            <select name="is_active" required>
-                <option value="1" {{ old('is_active', '1') == '1' ? 'selected' : '' }}>
-                    Yes
-                </option>
-                <option value="0" {{ old('is_active') == '0' ? 'selected' : '' }}>
-                    No
-                </option>
-            </select>
+            <label>
+                <input
+                    type="checkbox"
+                    name="is_active"
+                    value="1"
+                    {{ old('is_active', '1') == '1' ? 'checked' : '' }}
+                >
+                Active
+            </label>
         </p>
 
         <button type="submit">Save Course</button>
@@ -78,5 +102,4 @@
 
     </form>
 
-</body>
-</html>
+@endsection

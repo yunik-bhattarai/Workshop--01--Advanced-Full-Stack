@@ -1,90 +1,107 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Edit Course</title>
-</head>
-<body>
+@extends('layouts.app')
+
+@section('title', 'Edit Course')
+
+@section('content')
 
     <h1>Edit Course</h1>
 
-    @if ($errors->any())
-        <ul>
-            @foreach ($errors->all() as $error)
-                <li>{{ $error }}</li>
-            @endforeach
-        </ul>
-    @endif
+    @include('partials.errors')
 
     <form action="{{ route('courses.update', $course) }}" method="POST">
         @csrf
         @method('PUT')
 
         <p>
-            <label>Name:</label><br>
-            <input type="text" name="name"
-                   value="{{ old('name', $course->name) }}" required>
+            <label for="name">Name:</label><br>
+            <input
+                type="text"
+                id="name"
+                name="name"
+                value="{{ old('name', $course->name) }}"
+            >
         </p>
 
         <p>
-            <label>Description:</label><br>
-            <textarea name="description" required>{{ old('description', $course->description) }}</textarea>
+            <label for="description">Description:</label><br>
+            <textarea
+                id="description"
+                name="description"
+            >{{ old('description', $course->description) }}</textarea>
         </p>
 
         <p>
-            <label>Duration:</label><br>
-            <input type="text" name="duration"
-                   value="{{ old('duration', $course->duration) }}" required>
+            <label for="duration">Duration:</label><br>
+            <input
+                type="number"
+                id="duration"
+                name="duration"
+                min="1"
+                value="{{ old('duration', $course->duration) }}"
+            >
         </p>
 
         <p>
-            <label>Fee:</label><br>
-            <input type="number" name="fee" step="0.01" min="0"
-                   value="{{ old('fee', $course->fee) }}" required>
+            <label for="fee">Fee:</label><br>
+            <input
+                type="number"
+                id="fee"
+                name="fee"
+                step="0.01"
+                min="0"
+                value="{{ old('fee', $course->fee) }}"
+            >
         </p>
 
         <p>
-            <label>Difficulty:</label><br>
-            <select name="difficulty" required>
-                <option value="Easy"
-                    {{ old('difficulty', $course->difficulty) == 'Easy' ? 'selected' : '' }}>
+            <label for="difficulty">Difficulty:</label><br>
+
+            <select id="difficulty" name="difficulty">
+
+                <option
+                    value="Easy"
+                    {{ old('difficulty', $course->difficulty) === 'Easy' ? 'selected' : '' }}
+                >
                     Easy
                 </option>
 
-                <option value="Medium"
-                    {{ old('difficulty', $course->difficulty) == 'Medium' ? 'selected' : '' }}>
+                <option
+                    value="Medium"
+                    {{ old('difficulty', $course->difficulty) === 'Medium' ? 'selected' : '' }}
+                >
                     Medium
                 </option>
 
-                <option value="Hard"
-                    {{ old('difficulty', $course->difficulty) == 'Hard' ? 'selected' : '' }}>
+                <option
+                    value="Hard"
+                    {{ old('difficulty', $course->difficulty) === 'Hard' ? 'selected' : '' }}
+                >
                     Hard
                 </option>
+
             </select>
         </p>
 
         <p>
-            <label>Active:</label><br>
-            <select name="is_active" required>
-                <option value="1"
-                    {{ old('is_active', $course->is_active) == '1' ? 'selected' : '' }}>
-                    Yes
-                </option>
+            <input type="hidden" name="is_active" value="0">
 
-                <option value="0"
-                    {{ old('is_active', $course->is_active) == '0' ? 'selected' : '' }}>
-                    No
-                </option>
-            </select>
+            <label>
+                <input
+                    type="checkbox"
+                    name="is_active"
+                    value="1"
+                    {{ old('is_active', $course->is_active) ? 'checked' : '' }}
+                >
+                Active
+            </label>
         </p>
 
         <button type="submit">Update Course</button>
 
-        <a href="{{ route('courses.index') }}">
-            Back to Course List
+        <a href="{{ route('courses.show', $course) }}">
+            Cancel
         </a>
+
     </form>
 
-</body>
-</html>
+@endsection

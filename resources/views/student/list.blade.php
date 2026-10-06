@@ -1,29 +1,12 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Students</title>
-</head>
-<body>
+@extends('layouts.app')
+
+@section('title', 'Students')
+
+@section('content')
 
     <h1>Student List</h1>
 
-    @if (session('success'))
-        <p>{{ session('success') }}</p>
-    @endif
-
-    @if ($errors->any())
-        <div>
-            <strong>Please fix the following errors:</strong>
-
-            <ul>
-                @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
-            </ul>
-        </div>
-    @endif
+    @include('partials.errors')
 
     <p>
         <a href="{{ route('students.create') }}">Add Student</a>
@@ -75,7 +58,11 @@
                         <td>{{ $student->name }}</td>
                         <td>{{ $student->email }}</td>
                         <td>{{ $student->phone }}</td>
-                        <td>{{ $student->date_of_birth }}</td>
+
+                        <td>
+                            {{ $student->date_of_birth?->format('d M Y') }}
+                        </td>
+
                         <td>{{ $student->address }}</td>
 
                         <td>
@@ -109,5 +96,4 @@
         </table>
     @endif
 
-</body>
-</html>
+@endsection

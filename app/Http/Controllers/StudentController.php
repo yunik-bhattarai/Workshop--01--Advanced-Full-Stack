@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreStudentRequest;
+use App\Http\Requests\UpdateStudentRequest;
 use App\Models\Student;
 use Illuminate\Http\Request;
 use League\Csv\Reader;
@@ -14,9 +16,9 @@ class StudentController extends Controller
      */
     public function index()
     {
-        $students = Student::all();
-
-        return view('student.list', compact('students'));
+        return view('student.list', [
+            'students' => Student::all(),
+        ]);
     }
 
     /**
@@ -30,21 +32,13 @@ class StudentController extends Controller
     /**
      * Store a newly created student.
      */
-    public function store(Request $request)
+    public function store(StoreStudentRequest $request)
     {
-        $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:students,email',
-            'phone' => 'required|string|max:20',
-            'date_of_birth' => 'required|date',
-            'address' => 'required|string',
-        ]);
-
-        Student::create($validated);
+        $student = Student::create($request->validated());
 
         return redirect()
             ->route('students.index')
-            ->with('success', 'Student created successfully.');
+            ->with('success', "Student {$student->name} created successfully!");
     }
 
     /**
@@ -52,7 +46,9 @@ class StudentController extends Controller
      */
     public function show(Student $student)
     {
-        return view('student.detail', compact('student'));
+        return view('student.detail', [
+            'student' => $student,
+        ]);
     }
 
     /**
@@ -60,27 +56,21 @@ class StudentController extends Controller
      */
     public function edit(Student $student)
     {
-        return view('student.edit', compact('student'));
+        return view('student.edit', [
+            'student' => $student,
+        ]);
     }
 
     /**
      * Update a student.
      */
-    public function update(Request $request, Student $student)
+    public function update(UpdateStudentRequest $request, Student $student)
     {
-        $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:students,email,' . $student->id,
-            'phone' => 'required|string|max:20',
-            'date_of_birth' => 'required|date',
-            'address' => 'required|string',
-        ]);
-
-        $student->update($validated);
+        $student->update($request->validated());
 
         return redirect()
-            ->route('students.index')
-            ->with('success', 'Student updated successfully.');
+            ->route('students.show', $student)
+            ->with('success', 'Student updated successfully!');
     }
 
     /**
@@ -92,7 +82,7 @@ class StudentController extends Controller
 
         return redirect()
             ->route('students.index')
-            ->with('success', 'Student deleted successfully.');
+            ->with('success', 'Student deleted successfully!');
     }
 
     /**

@@ -1,25 +1,12 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Add Student</title>
-</head>
-<body>
+@extends('layouts.app')
+
+@section('title', 'Add Student')
+
+@section('content')
 
     <h1>Add Student</h1>
 
-    @if ($errors->any())
-        <div>
-            <strong>Please fix the following errors:</strong>
-
-            <ul>
-                @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
-            </ul>
-        </div>
-    @endif
+    @include('partials.errors')
 
     <form action="{{ route('students.store') }}" method="POST">
         @csrf
@@ -31,7 +18,6 @@
                 id="name"
                 name="name"
                 value="{{ old('name') }}"
-                required
             >
         </div>
 
@@ -44,7 +30,6 @@
                 id="email"
                 name="email"
                 value="{{ old('email') }}"
-                required
             >
         </div>
 
@@ -57,7 +42,6 @@
                 id="phone"
                 name="phone"
                 value="{{ old('phone') }}"
-                required
             >
         </div>
 
@@ -70,7 +54,6 @@
                 id="date_of_birth"
                 name="date_of_birth"
                 value="{{ old('date_of_birth') }}"
-                required
             >
         </div>
 
@@ -81,7 +64,6 @@
             <textarea
                 id="address"
                 name="address"
-                required
             >{{ old('address') }}</textarea>
         </div>
 
@@ -89,8 +71,9 @@
 
         <button type="submit">Save Student</button>
 
-        <a href="{{ route('students.index') }}">Back to Student List</a>
+        <a href="{{ route('students.index') }}">
+            Back to Student List
+        </a>
     </form>
 
-</body>
-</html>
+@endsection
